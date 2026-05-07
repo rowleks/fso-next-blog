@@ -1,8 +1,20 @@
 import Link from "next/link";
 import { getBlogs } from "../services/blogs.service";
 
-const BlogList = () => {
-  const blogs = getBlogs();
+const BlogList = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) => {
+  const { filter } = await searchParams;
+  const allBlogs = getBlogs();
+
+  const blogs = filter
+    ? allBlogs.filter((blog) =>
+        blog.title.toLowerCase().includes(filter.toLowerCase()),
+      )
+    : allBlogs;
+
   return (
     <div className="p-4">
       <button className="border px-4 py-2 cursor-pointer bg-blue-600">
