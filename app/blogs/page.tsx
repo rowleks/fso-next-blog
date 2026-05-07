@@ -12,7 +12,7 @@ const BlogList = () => {
       <ul className="list-none p-0 space-y-4">
         {blogs
           .slice()
-          .sort((a, b) => b.id - a.id)
+          .sort((a, b) => b.likes - a.likes)
           .map((blog) => (
             <li
               key={blog.id}
