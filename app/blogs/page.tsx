@@ -18,7 +18,7 @@ const BlogList = () => {
               key={blog.id}
               className="border-foreground border rounded-2xl p-4"
             >
-              <Link href={blog.url}>
+              <Link href={`/blogs/${blog.id}`}>
                 <h3 className="text-xl font-semibold mb-1">{blog.title}</h3>
                 <small>By {blog.author}</small>
                 <p>Likes: {blog.likes}</p>
