@@ -3,7 +3,7 @@ config({ path: ".env.local" });
 
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
-import { blog } from "./schema";
+import { blogs } from "./schema";
 
 const db = drizzle(process.env.DATABASE_URL!, { schema });
 
@@ -49,7 +49,7 @@ const seedData = [
 async function seed() {
   console.log("Seeding database...");
 
-  await db.insert(blog).values(seedData);
+  await db.insert(blogs).values(seedData);
 
   console.log(`Inserted ${seedData.length} blog entries.`);
   process.exit(0);
