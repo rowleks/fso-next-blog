@@ -15,7 +15,7 @@ export const getBlogById = async (id: number) => {
 export const addLikes = async (id: number) => {
   const blog = await getBlogById(id);
   if (blog) {
-    blog.likes!++;
+    blog.likes++;
     await db.update(blogs).set({ likes: blog.likes }).where(eq(blogs.id, id));
   }
 };

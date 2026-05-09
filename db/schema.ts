@@ -5,5 +5,5 @@ export const blogs = pgTable("blogs", {
   author: text("author").notNull(),
   title: text("title").notNull(),
   url: text("url").notNull(),
-  likes: integer("likes").default(0),
+  likes: integer("likes").default(0).notNull(),
 });
