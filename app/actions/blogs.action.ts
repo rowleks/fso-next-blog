@@ -11,14 +11,14 @@ export async function createBlog(formData: FormData) {
 
   if (!title || !author || !url) return;
 
-  addBlog(title, author, url, likes);
+  await addBlog(title, author, url, likes);
   revalidatePath("/blogs");
   redirect("/blogs");
 }
 
 export async function likeBlog(formData: FormData) {
   const id = Number(formData.get("id"));
-  addLikes(id);
+  await addLikes(id);
   revalidatePath("/blogs");
   revalidatePath(`/blogs/${id}`);
 }

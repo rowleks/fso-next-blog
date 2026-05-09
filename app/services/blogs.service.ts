@@ -1,57 +1,37 @@
-const blogs = [
-  {
-    id: 1,
-    title: "The Joys of Baking Sourdough",
-    author: "Alice Peterson",
-    url: "https://example.com/sourdough",
-    likes: 12,
-  },
-  {
-    id: 2,
-    title: "Exploring the National Parks",
-    author: "Bob Williams",
-    url: "https://example.com/national-parks",
-    likes: 25,
-  },
-  {
-    id: 3,
-    title: "Beginner's Guide to Python",
-    author: "Charlie Davis",
-    url: "https://example.com/python-guide",
-    likes: 5,
-  },
-];
+import { blogs } from "@/db/schema";
+import { db } from "@/db";
+import { eq } from "drizzle-orm";
 
-let id = 4;
-
-export const getBlogs = () => {
-  return blogs;
+export const getBlogs = async () => {
+  return await db.query.blogs.findMany();
 };
 
-export const getBlogById = (id: number) => {
-  return blogs.find((blog) => blog.id === id);
+export const getBlogById = async (id: number) => {
+  return await db.query.blogs.findFirst({
+    where: eq(blogs.id, id),
+  });
 };
 
-export const addLikes = (id: number) => {
-  const blog = getBlogById(id);
+export const addLikes = async (id: number) => {
+  const blog = await getBlogById(id);
   if (blog) {
-    blog.likes++;
+    blog.likes!++;
+    await db.update(blogs).set({ likes: blog.likes }).where(eq(blogs.id, id));
   }
 };
 
-export const addBlog = (
+export const addBlog = async (
   title: string,
   author: string,
   url: string,
   likes: number,
 ) => {
   const newBlog = {
-    id: id++,
     title,
     author,
     url,
     likes,
   };
-  blogs.push(newBlog);
+  await db.insert(blogs).values(newBlog);
   return newBlog;
 };
