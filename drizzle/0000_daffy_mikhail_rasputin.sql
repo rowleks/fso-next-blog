@@ -3,5 +3,5 @@ CREATE TABLE "blogs" (
 	"author" text NOT NULL,
 	"title" text NOT NULL,
 	"url" text NOT NULL,
-	"likes" integer DEFAULT 0
+	"likes" integer DEFAULT 0 NOT NULL
 );

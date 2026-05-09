@@ -1,5 +1,5 @@
 {
-  "id": "e82a1595-2e68-48e1-ba4b-6e3eaeae4da3",
+  "id": "9611b103-cb03-4ec4-846a-771a8d51c5c5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -36,7 +36,7 @@
           "name": "likes",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": 0
         }
       },
