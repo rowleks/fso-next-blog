@@ -33,6 +33,7 @@ export default function RootLayout({
           <nav className="text-foreground my-2 p-4 space-x-5 underline underline-offset-5">
             <Link href="/">Home</Link>
             <Link href="/blogs">Blogs</Link>
+            <Link href="/users">Users</Link>
           </nav>
         </header>
         <main className="container p-4">{children}</main>
