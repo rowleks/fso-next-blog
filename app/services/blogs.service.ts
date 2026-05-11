@@ -25,12 +25,14 @@ export const addBlog = async (
   author: string,
   url: string,
   likes: number,
+  userId: number = Math.ceil(Math.random() * 3),
 ) => {
   const newBlog = {
     title,
     author,
     url,
     likes,
+    userId,
   };
   await db.insert(blogs).values(newBlog);
   return newBlog;
