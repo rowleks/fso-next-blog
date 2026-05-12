@@ -25,7 +25,7 @@ export const addBlog = async (
   author: string,
   url: string,
   likes: number,
-  userId: number = Math.ceil(Math.random() * 3),
+  userId: number,
 ) => {
   const newBlog = {
     title,

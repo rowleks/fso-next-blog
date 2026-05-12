@@ -2,8 +2,14 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { addBlog, addLikes } from "../services/blogs.service";
+import { getCurrentUser } from "../services/auth.service";
 
 export async function createBlog(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const userId = user.id;
+
   const title = (formData.get("title") as string)?.trim();
   const author = (formData.get("author") as string)?.trim();
   const url = (formData.get("url") as string)?.trim();
@@ -11,7 +17,7 @@ export async function createBlog(formData: FormData) {
 
   if (!title || !author || !url) return;
 
-  await addBlog(title, author, url, likes);
+  await addBlog(title, author, url, likes, userId);
   revalidatePath("/blogs");
   redirect("/blogs");
 }

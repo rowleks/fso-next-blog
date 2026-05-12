@@ -1,6 +1,6 @@
 import { createBlog } from "@/app/actions/blogs.action";
 
-const NewBlogPage = () => {
+const NewBlogPage = async () => {
   return (
     <div className="p-4 max-w-sm">
       <h2 className="text-2xl font-bold mb-4">Add New Blog</h2>
