@@ -2,15 +2,16 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import { drizzle } from "drizzle-orm/neon-http";
+import bcrypt from "bcryptjs";
 import * as schema from "./schema";
 import { blogs, users } from "./schema";
 
 const db = drizzle(process.env.DATABASE_URL!, { schema });
 
 const usersData = [
-  { username: "alice", name: "Alice Johnson" },
-  { username: "bob", name: "Bob Smith" },
-  { username: "charlie", name: "Charlie Brown" },
+  { username: "alice", name: "Alice Johnson", password: "alice123" },
+  { username: "bob", name: "Bob Smith", password: "bob123" },
+  { username: "charlie", name: "Charlie Brown", password: "charlie123" },
 ];
 
 const blogsData = [
@@ -25,7 +26,14 @@ const blogsData = [
 async function seed() {
   console.log("Seeding database...");
 
-  const insertedUsers = await db.insert(users).values(usersData).returning();
+  const usersWithHashes = await Promise.all(
+    usersData.map(async ({ password, ...rest }) => ({
+      ...rest,
+      passwordHash: await bcrypt.hash(password, 10),
+    })),
+  );
+
+  const insertedUsers = await db.insert(users).values(usersWithHashes).returning();
   console.log(`Inserted ${insertedUsers.length} users.`);
 
   const blogsWithUserIds = blogsData.map((blog) => ({

@@ -21,13 +21,13 @@ export default function Navbar() {
                 <button className="btn">
                   <Link href="/blogs/new">Add Blog</Link>
                 </button>
+                <button
+                  onClick={() => signOut()}
+                  className="btn border-red-500 border bg-transparent"
+                >
+                  Logout
+                </button>
               </div>
-              <button
-                onClick={() => signOut()}
-                className="btn outline-red-500 bg-transparent"
-              >
-                Logout
-              </button>
             </>
           ) : (
             <Link href="/login" className="btn bg-green-500">
