@@ -1,11 +1,23 @@
-import { createBlog } from "@/app/actions/blogs.action";
+"use client";
 
-const NewBlogPage = async () => {
+import { createBlog } from "@/app/actions/blogs.action";
+import { useActionState, useState } from "react";
+
+const NewBlogPage = () => {
+  const [state, dispatchAction, isPending] = useActionState(createBlog, {
+    error: "",
+  });
+
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+  const [likes, setLikes] = useState(0);
+
   return (
     <div className="p-4 max-w-sm">
       <h2 className="text-2xl font-bold mb-4">Add New Blog</h2>
 
-      <form action={createBlog} className="flex flex-col gap-3">
+      <form action={dispatchAction} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <label htmlFor="title">Title</label>
           <input
@@ -14,6 +26,8 @@ const NewBlogPage = async () => {
             type="text"
             required
             className="border p-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
 
@@ -25,6 +39,8 @@ const NewBlogPage = async () => {
             type="text"
             required
             className="border p-2"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
           />
         </div>
 
@@ -36,6 +52,8 @@ const NewBlogPage = async () => {
             type="url"
             required
             className="border p-2"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
           />
         </div>
 
@@ -46,16 +64,16 @@ const NewBlogPage = async () => {
             name="likes"
             type="number"
             min="0"
-            defaultValue={0}
             className="border p-2 no-spinner"
+            value={likes}
+            onChange={(e) => setLikes(parseInt(e.target.value))}
           />
         </div>
 
-        <button
-          type="submit"
-          className="border p-2 cursor-pointer mt-2 bg-blue-600"
-        >
-          Add Blog
+        {state.error && <p className="text-red-500 text-sm">{state.error}</p>}
+
+        <button type="submit" className="btn" disabled={isPending}>
+          {isPending ? "Adding..." : "Add Blog"}
         </button>
       </form>
     </div>

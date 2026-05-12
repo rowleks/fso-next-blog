@@ -4,7 +4,10 @@ import { revalidatePath } from "next/cache";
 import { addBlog, addLikes } from "../services/blogs.service";
 import { getCurrentUser } from "../services/auth.service";
 
-export async function createBlog(formData: FormData) {
+export async function createBlog(
+  _prevData: { error: string },
+  formData: FormData,
+) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
@@ -15,7 +18,10 @@ export async function createBlog(formData: FormData) {
   const url = (formData.get("url") as string)?.trim();
   const likes = Number(formData.get("likes")) || 0;
 
-  if (!title || !author || !url) return;
+  if (title.length < 5) return { error: "Title must be at least 5 characters" };
+  if (author.length < 5)
+    return { error: "Author must be at least 5 characters" };
+  if (url.length < 5) return { error: "URL must be at least 5 characters" };
 
   await addBlog(title, author, url, likes, userId);
   revalidatePath("/blogs");
