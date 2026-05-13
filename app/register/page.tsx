@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const [name, setName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [state, dispatchAction, isPending] = useActionState(registerUser, {
     error: "",
   });
@@ -44,6 +45,15 @@ export default function RegisterPage() {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          className="border px-3 py-2"
+          name="confirm-password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
         {state.error && <p className="text-red-500 text-sm">{state.error}</p>}

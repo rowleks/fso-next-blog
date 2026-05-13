@@ -7,26 +7,37 @@ import { redirect } from "next/navigation";
 
 export const registerUser = async (
   _prevData: { error: string },
-  FormData: FormData,
+  formData: FormData,
 ) => {
-  const name = (FormData.get("name") as string)?.trim();
-  const username = (FormData.get("username") as string)?.trim();
-  const password = FormData.get("password") as string;
-
-  console.log(name, username, password);
+  const name = (formData.get("name") as string)?.trim();
+  const username = (formData.get("username") as string)?.trim();
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirm-password") as string;
 
   if (!name) return { error: "Name is required" };
-  if (!username) return { error: "Username is required" };
-  if (password.length < 5)
-    return { error: "Password must be at least 5 characters" };
+  if (username.length < 4)
+    return { error: "Username must be at least 4 characters" };
+  if (password.length < 4)
+    return { error: "Password must be at least 4 characters" };
+  if (password !== confirmPassword) {
+    return { error: "Passwords do not match" };
+  }
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  await db.insert(users).values({
-    name,
-    username,
-    passwordHash,
-  });
+  const [inserted] = await db
+    .insert(users)
+    .values({
+      name,
+      username,
+      passwordHash,
+    })
+    .onConflictDoNothing()
+    .returning();
+
+  if (!inserted) {
+    return { error: "Username already exists" };
+  }
 
   redirect("/login?registered=success");
 };
