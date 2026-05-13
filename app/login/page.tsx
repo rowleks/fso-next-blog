@@ -1,18 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+
+function RegistrationSuccess() {
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered");
+
+  if (registered !== "success") return null;
+  return (
+    <p className="text-green-600">Registration successful! Please log in.</p>
+  );
+}
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const registered = searchParams.get("registered");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,13 +41,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 py-24">
-      <div>
-        {registered === "success" && (
-          <p className="text-green-600">
-            Registration successful! Please log in.
-          </p>
-        )}
-      </div>
+      <Suspense>
+        <RegistrationSuccess />
+      </Suspense>
       <h1 className="text-3xl font-bold">Login</h1>
       <form
         onSubmit={handleSubmit}
